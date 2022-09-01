@@ -1,0 +1,41 @@
+    fun getPermission(type: PermissionType, showException: Boolean): Int {
+        if (safeFetch && !File(path).exists()) {
+            return -1
+        }
+
+        if (File(path).isDirectory) {
+            val parent = Paths.get(File(path).absolutePath).parent.toRealPath(LinkOption.NOFOLLOW_LINKS).toString()
+        } else {
+            val processBuilder = ProcessBuilder()
+            processBuilder.command("/bin/bash", "-c", "ls -l $path | cut -d' ' -f 1")
+
+            try {
+                val process = processBuilder.start()
+                val reader = BufferedReader(InputStreamReader(process.inputStream))
+                val line: String = reader.readLine().substring(1, 4)
+
+                var permissionNumber: Int = 0
+                for (char in line) {
+                    permissionNumber += when (char) {
+                        'r' -> 4
+                        'w' -> 2
+                        'x' -> 1
+                        else -> 0   /* - */
+                    }
+                }
+
+                process.waitFor()
+                return permissionNumber
+            } catch (e: IOException) {
+                if (showException) {
+                    e.printStackTrace()
+                }
+                return -1;
+            } catch (e: InterruptedException) {
+                if (showException) {
+                    e.printStackTrace()
+                }
+                return -1;
+            }
+        }
+    }
