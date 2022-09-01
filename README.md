@@ -1,7 +1,7 @@
 # FileSystem 🦋
 
 This library help developers to fetch files and folder information from system and manipulate them.</br>
-Information can be size,access time,count content,permissions or more futures you can access from this library.</br>
+Information can be size,access time,content,permissions or more futures that you can access.</br>
 Both kotlin and Java is supported but some futures may work only on **Unix-Based** systems like Mac and Linux operating systems.
 
 --------------
